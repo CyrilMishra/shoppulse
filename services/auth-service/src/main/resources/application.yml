@@ -1,0 +1,64 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: auth-service
+  datasource:
+    url: jdbc:mysql://localhost:3306/authdb
+    username: root
+    password: shoppulse   # TODO Block 1 (V2): move to Vault, delete from here
+  jpa:
+    hibernate:
+      ddl-auto: update    # fine for learning; prod uses Flyway/Liquibase migrations
+    show-sql: true        # watch what Hibernate actually executes — N+1 spotting!
+
+shoppulse:
+  jwt:
+    secret: local-dev-only-secret-please-move-me-to-vault-0123456789  # TODO -> Vault
+    expiry-minutes: 15
+
+# TODO Block 1 (V2): after enabling the vault starter in build.gradle:
+# spring:
+#   config:
+#     import: vault://
+#   cloud:
+#     vault:
+#       uri: http://localhost:8200
+#       token: shoppulse-root          # dev only; prod uses AppRole/K8s auth
+#       kv:
+#         enabled: true
+#         backend: secret
+#         default-context: auth-service
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics
+  tracing:
+    sampling:
+      probability: 1.0
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
+
+---
+# Profiles demo (Block 1, step P1): run with
+#   ./gradlew :services:auth-service:bootRun --args='--spring.profiles.active=docker'
+# and watch the datasource host change. Same mechanism selects config per env in prod.
+spring:
+  config:
+    activate:
+      on-profile: docker
+  datasource:
+    url: jdbc:mysql://mysql:3306/authdb
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka/

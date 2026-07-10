@@ -1,0 +1,52 @@
+// The CONTRACT-FIRST part of gRPC: this file is the API. protoc generates both
+// server base classes and client stubs from it. In production this file lives in
+// a shared contracts repo published as an artifact; here it's duplicated in
+// order-service (client) and inventory-service (server) — keep them identical.
+//
+// Interview points: HTTP/2 multiplexing, binary protobuf vs JSON text,
+// field NUMBERS are the wire contract (renaming a field is safe, renumbering is
+// a breaking change), and the 4 call types (unary / server-stream / client-stream / bidi).
+
+syntax = "proto3";
+
+package inventory;
+
+option java_package = "com.shoppulse.inventory.grpc";
+option java_multiple_files = true;
+
+service InventoryService {
+  rpc ReserveStock (ReserveStockRequest) returns (ReserveStockResponse);
+  rpc ReleaseStock (ReleaseStockRequest) returns (ReleaseStockResponse);   // saga compensation
+  rpc GetStock     (GetStockRequest)     returns (GetStockResponse);
+}
+
+message ReserveStockRequest {
+  string order_id = 1;
+  string sku = 2;
+  int32 quantity = 3;
+}
+
+message ReserveStockResponse {
+  bool reserved = 1;
+  string reason = 2;      // e.g. "INSUFFICIENT_STOCK"
+}
+
+message ReleaseStockRequest {
+  string order_id = 1;
+  string sku = 2;
+  int32 quantity = 3;
+}
+
+message ReleaseStockResponse {
+  bool released = 1;
+}
+
+message GetStockRequest {
+  string sku = 1;
+}
+
+message GetStockResponse {
+  string sku = 1;
+  int32 available = 2;
+  int32 reserved = 3;
+}

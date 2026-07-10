@@ -1,0 +1,15 @@
+# Non-secret config as env vars. Spring Boot's relaxed binding maps
+# SPRING_DATASOURCE_URL -> spring.datasource.url, so a ConfigMap can override
+# anything in application.yml — same app image, different env. That's 12-factor
+# config and the K8s version of your Block-1 profiles.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: product-service-config
+data:
+  SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3306/productdb
+  SPRING_DATASOURCE_USERNAME: root
+  SPRING_DATASOURCE_PASSWORD: shoppulse   # TODO Block 4: move to a Secret (see deployment.yaml)
+  SPRING_DATA_REDIS_HOST: host.docker.internal
+  EUREKA_CLIENT_ENABLED: "false"          # no Eureka inside K8s — Services replace it
+  MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://host.docker.internal:9411/api/v2/spans

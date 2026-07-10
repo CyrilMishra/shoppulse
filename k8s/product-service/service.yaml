@@ -1,0 +1,15 @@
+# A Service = stable virtual IP + DNS name in front of the pods matching the
+# selector. kube-proxy round-robins connections across ready endpoints —
+# SERVER-SIDE load balancing (contrast with Eureka+client-side LB from Block 1;
+# this is why K8s-native apps don't need Eureka).
+apiVersion: v1
+kind: Service
+metadata:
+  name: product-service
+spec:
+  type: ClusterIP          # internal-only; NodePort/LoadBalancer expose outward
+  selector:
+    app: product-service
+  ports:
+    - port: 8082
+      targetPort: 8082

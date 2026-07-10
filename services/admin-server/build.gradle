@@ -1,0 +1,22 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot'
+    id 'io.spring.dependency-management'
+}
+
+java { toolchain { languageVersion = JavaLanguageVersion.of(17) } }
+repositories { mavenCentral() }
+
+dependencies {
+    // Spring Boot Admin server UI. Because it's also a Eureka client, it
+    // DISCOVERS every registered service automatically — no per-service
+    // admin-client dependency needed. (That's the elegant setup.)
+    implementation 'de.codecentric:spring-boot-admin-starter-server:3.3.3'
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+dependencyManagement {
+    imports { mavenBom "org.springframework.cloud:spring-cloud-dependencies:2023.0.3" }
+}

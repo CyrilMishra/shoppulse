@@ -1,0 +1,16 @@
+{
+  "name": "products-connector",
+  "config": {
+    "connector.class": "io.debezium.connector.mysql.MySqlConnector",
+    "database.hostname": "mysql",
+    "database.port": "3306",
+    "database.user": "debezium",
+    "database.password": "dbz",
+    "database.server.id": "184054",
+    "topic.prefix": "shoppulse",
+    "database.include.list": "productdb",
+    "table.include.list": "productdb.products",
+    "schema.history.internal.kafka.bootstrap.servers": "kafka:19092",
+    "schema.history.internal.kafka.topic": "schema-changes.productdb"
+  }
+}

@@ -1,0 +1,15 @@
+.gradle/
+build/
+out/
+bin/
+.idea/
+*.iml
+.vscode/
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+*.log
+.DS_Store
+qdrant_storage/

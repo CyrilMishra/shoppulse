@@ -1,0 +1,24 @@
+# python -m venv .venv && .venv\Scripts\activate && pip install -r requirements.txt
+fastapi
+uvicorn[standard]
+httpx
+python-dotenv
+
+# LLM + orchestration
+langchain
+langchain-community
+langchain-ollama
+langchain-google-genai
+langgraph
+
+# Vector DB
+qdrant-client
+langchain-qdrant
+
+# Observability + evaluation
+langfuse
+ragas
+datasets
+
+# MCP server SDK
+mcp

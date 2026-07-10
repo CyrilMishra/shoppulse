@@ -1,0 +1,50 @@
+server:
+  port: 8085
+
+spring:
+  application:
+    name: payment-service
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: payment-service
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "com.shoppulse.*"
+
+aws:
+  region: us-east-1
+  access-key: local        # emulators accept anything
+  secret-key: local
+  dynamodb:
+    endpoint: http://localhost:8002
+  sqs:
+    endpoint: http://localhost:4566
+    retry-queue: payment-retry
+
+shoppulse:
+  webhook:
+    notification-url: http://localhost:8086/webhooks/payment
+    signing-secret: webhook-hmac-secret-dev   # HMAC-SHA256 the body, send as X-Signature
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics
+  tracing:
+    sampling:
+      probability: 1.0
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans

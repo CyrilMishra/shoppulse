@@ -1,0 +1,11 @@
+# Auto-provisions the Prometheus datasource so Grafana works on first start.
+# In Grafana: Dashboards -> New -> Import -> dashboard ID 4701 (JVM Micrometer)
+# gives you a full JVM dashboard for free.
+apiVersion: 1
+
+datasources:
+  - name: Prometheus
+    type: prometheus
+    access: proxy
+    url: http://prometheus:9090
+    isDefault: true

@@ -1,0 +1,31 @@
+pluginManagement {
+    plugins {
+        id 'org.springframework.boot' version '3.3.4'
+        id 'io.spring.dependency-management' version '1.1.6'
+        id 'com.google.protobuf' version '0.9.4'
+    }
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+    }
+}
+
+plugins {
+    // Auto-downloads a matching JDK if the toolchain version isn't installed locally
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '0.8.0'
+}
+
+rootProject.name = 'shoppulse'
+
+include(
+        'services:eureka-server',
+        'services:api-gateway',
+        'services:auth-service',
+        'services:product-service',
+        'services:order-service',
+        'services:inventory-service',
+        'services:payment-service',
+        'services:notification-service',
+        'services:admin-server'
+)
+// ai-support-service is Python — not part of the Gradle build

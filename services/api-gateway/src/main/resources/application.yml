@@ -1,0 +1,66 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+  cloud:
+    gateway:
+      routes:
+        # TODO Block 1 (G1): uncomment, run, then curl through the gateway.
+        # lb:// = look the name up in Eureka and load-balance across instances.
+        # - id: product-service
+        #   uri: lb://product-service
+        #   predicates:
+        #     - Path=/api/products/**
+        # - id: auth-service
+        #   uri: lb://auth-service
+        #   predicates:
+        #     - Path=/api/auth/**
+        # - id: order-service
+        #   uri: lb://order-service
+        #   predicates:
+        #     - Path=/api/orders/**
+        # - id: ai-support
+        #   uri: http://localhost:8000    # python service is not in Eureka — direct URI
+        #   predicates:
+        #     - Path=/api/support/**
+
+        # TODO Block 2 (S6): add to a route (requires KeyResolver bean):
+        #   filters:
+        #     - name: RequestRateLimiter
+        #       args:
+        #         redis-rate-limiter.replenishRate: 5    # tokens/sec
+        #         redis-rate-limiter.burstCapacity: 10   # bucket size
+        #     - name: CircuitBreaker
+        #       args:
+        #         name: productCircuit
+        #         fallbackUri: forward:/fallback/products
+        []
+
+shoppulse:
+  jwt:
+    # Must match auth-service. TODO Block 1 (V2): move both to Vault.
+    secret: local-dev-only-secret-please-move-me-to-vault-0123456789
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics,gateway
+  tracing:
+    sampling:
+      probability: 1.0   # trace everything locally; prod uses ~0.1
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
