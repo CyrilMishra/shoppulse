@@ -57,6 +57,8 @@ docker compose exec redis redis-cli ping        # PONG
 docker compose exec mongo mongosh --eval "db.runCommand({ping:1})"
 
 # Vault — open http://localhost:8200 (token: shoppulse-root), then:
+docker compose exec -e VAULT_ADDR=http://127.0.0.1:8200 -e VAULT_TOKEN=shoppulse-root vault vault kv put secret/hello foo=bar
+(deprecated)
 docker compose exec vault vault kv put -address=http://127.0.0.1:8200 secret/hello foo=bar
 # (export VAULT_TOKEN=shoppulse-root inside the container if it asks)
 ```
