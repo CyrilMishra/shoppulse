@@ -3,6 +3,7 @@ package com.shoppulse.product;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * Product catalog: MySQL + JPA, Redis cache, Swagger, Elasticsearch search.
@@ -32,6 +33,7 @@ import org.springframework.cache.annotation.EnableCaching;
  *  D3  (Block 2) Kafka listener on Debezium topic "shoppulse.productdb.products"
  *      -> index into Elasticsearch. D4: GET /api/products/search?q= via ES.
  */
+@Configuration
 @EnableCaching
 @SpringBootApplication
 public class ProductServiceApplication {

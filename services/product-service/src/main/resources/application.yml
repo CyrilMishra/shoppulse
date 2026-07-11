@@ -22,7 +22,8 @@ spring:
   cache:
     type: redis
     redis:
-      time-to-live: 60s   # short TTL so you SEE expiry happen while testing
+      time-to-live: 60000ms   # short TTL so you SEE expiry happen while testing
+      cache-null-values: false
 
 # TODO Block 2 (D3): uncomment with the kafka/ES deps
 #  kafka:
@@ -53,3 +54,8 @@ management:
   zipkin:
     tracing:
       endpoint: http://localhost:9411/api/v2/spans
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.springframework.cache: TRACE
